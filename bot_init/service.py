@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.conf import settings
 from loguru import logger
 from progressbar import progressbar as pbar
@@ -114,3 +115,13 @@ def _created_subscriber_service(subscriber: Subscriber) -> Answer:
     )
     answers = ...
     return answers
+
+def date_obj(date_user):
+    answer = ''
+    try:
+        date_time_obj = datetime.strptime(date_user, '%d-%m-%Y')
+        answer = f'Дата: {date_time_obj.date()}'
+    except:
+        answer = 'Повторите ввод'
+    return answer
+
