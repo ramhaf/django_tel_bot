@@ -116,12 +116,12 @@ def _created_subscriber_service(subscriber: Subscriber) -> Answer:
     answers = ...
     return answers
 
-def date_obj(date_user):
-    answer = ''
+
+def reformat_date(source_date):
     try:
-        date_time_obj = datetime.strptime(date_user, '%d-%m-%Y')
+        date_time_obj = datetime.strptime(source_date, '%d-%m-%Y')
         answer = f'Дата: {date_time_obj.date()}'
-    except:
+    except ValueError:
         answer = 'Повторите ввод'
     return answer
 
