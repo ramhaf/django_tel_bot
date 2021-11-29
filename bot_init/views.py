@@ -4,11 +4,9 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from loguru import logger
 
-from bot_init.service import registration_subscriber
+from bot_init.service import reformat_date, registration_subscriber
 from bot_init.utils import get_tbot_instance, save_message
 from config.settings import TG_BOT
-
-from bot_init.service import reformat_date
 
 token = TG_BOT.token
 tbot = get_tbot_instance()

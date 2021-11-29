@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from django.conf import settings
 from loguru import logger
 from progressbar import progressbar as pbar
@@ -72,7 +73,7 @@ def update_webhook(host=f'{settings.TG_BOT.webhook_host}/{settings.TG_BOT.token}
     """Обновляем webhook."""
     try:
         tbot.remove_webhook()
-        res = tbot.set_webhook(host)
+        res = tbot.set_webhook(host)  # noqa: F841
         log.info("webhook updated successfully")
     except ApiException as e:
         log.error(e)
@@ -108,7 +109,8 @@ def _not_created_subscriber_service(subscriber: Subscriber):
 
 def _created_subscriber_service(subscriber: Subscriber) -> Answer:
     """Функция обрабатывает и генерирует ответ для нового подписчика."""
-    start_message_text = AdminMessage.objects.get(key='start').text  # TODO создать это сообщение с миграцией
+    # TODO создать это сообщение с миграцией
+    start_message_text = AdminMessage.objects.get(key='start').text  # noqa: F841
     _create_action(subscriber, SUBSCRIBER_ACTIONS[0][0])
     send_message_to_admin(
         'Зарегестрировался новый пользователь',
