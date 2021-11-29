@@ -35,6 +35,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 venv/
+.venv/
 build/
 develop-eggs/
 dist/
@@ -90,3 +91,7 @@ db.sqlite3
 
 # celery
 celery*
+
+# Redactors
+.idea/
+
