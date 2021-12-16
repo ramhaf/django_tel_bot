@@ -10,6 +10,7 @@ from bot_init.models import AdminMessage, Message, Subscriber, SubscriberAction
 from bot_init.schemas import SUBSCRIBER_ACTIONS
 from bot_init.services.answer import Answer
 from bot_init.utils import get_subscriber_by_chat_id, get_tbot_instance, save_message
+from prayers.models import Prayer
 
 log = logger.bind(task="app")
 tbot = get_tbot_instance()
@@ -133,9 +134,39 @@ def download_namaztimecsv():
     '''Скачивает время намазма в формате csv'''
     url = 'https://dumrt.ru/netcat_files/482/640/Kazan.csv'
     req = requests.get(url)
-    with open('bot_init/services/namaztime.csv', 'wb') as file:
-        file.write(req.content)
-# download_namaztimecsv()
+    # with open('bot_init/services/namaztime.csv', 'wb') as file:
+    csv_file = req.content.decode('utf-8').splitlines()
+    reader = csv.reader(csv_file)
+    for row in reader:
+        row = row[0].split(';')
+        _create_prayer(row)
+
+
+def _create_prayer(raw_datetime):
+    """Doc.
+    
+    raw_datetime: Приходит данные типа ['12.03.2021', '12:30',...]
+    """
+    prayer_names = ['Утренний', 'Восход', 'Обеденный', 'Послеобеденный', 'Закат', 'Ночной']
+    prayer_time_indexes = [1, 3, 4, 6, 7, 8]
+    for i in range(6):
+        prayer_time_index = prayer_time_indexes[i]
+        prayer_name = prayer_names[i]
+        date = datetime.strptime(raw_datetime[0], '%d.%m.%Y')
+        hour, minutes = _parse_time(raw_datetime[prayer_time_index])
+        morning_time = date.replace(hour=hour, minute=minutes)
+        Prayer.objects.create(name=prayer_name, date_time=morning_time)
+
+
+
+def _parse_time(time):
+    """Doc.
+    
+    >>> _parse_time('05:43')
+    ... (5, 43)
+    """
+    hour, minutes = time.split(':')
+    return int(hour), int(minutes)
 
 
 def pars_csv():
@@ -144,4 +175,4 @@ def pars_csv():
         for row in reader:
             print(row[0])
 
-pars_csv()
+# pars_csv()

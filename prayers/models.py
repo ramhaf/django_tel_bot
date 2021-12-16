@@ -7,4 +7,4 @@ class Prayer(models.Model):
     name = models.TextField()
 
     def __str__(self):
-        return ['{}'.format(self.name), '{}'.format(self.date_time)]
+        return str(['{}'.format(self.name), '{}'.format(self.date_time)])

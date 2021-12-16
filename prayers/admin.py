@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from prayers.models import Prayer
+
+admin.site.register(Prayer)
