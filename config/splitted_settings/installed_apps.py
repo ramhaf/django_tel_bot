@@ -7,4 +7,5 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'bot_init',
+    'prayers',
 ]

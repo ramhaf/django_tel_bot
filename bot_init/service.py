@@ -1,3 +1,5 @@
+import requests
+import csv
 from datetime import datetime
 from django.conf import settings
 from loguru import logger
@@ -116,12 +118,30 @@ def _created_subscriber_service(subscriber: Subscriber) -> Answer:
     answers = ...
     return answers
 
-def date_obj(date_user):
-    answer = ''
+
+def reformat_date(source_date):
+    '''Возварщет объект datetime'''
     try:
-        date_time_obj = datetime.strptime(date_user, '%d-%m-%Y')
+        date_time_obj = datetime.strptime(source_date, '%d-%m-%Y')
         answer = f'Дата: {date_time_obj.date()}'
-    except:
+    except ValueError:
         answer = 'Повторите ввод'
     return answer
 
+
+def download_namaztimecsv():
+    '''Скачивает время намазма в формате csv'''
+    url = 'https://dumrt.ru/netcat_files/482/640/Kazan.csv'
+    req = requests.get(url)
+    with open('bot_init/services/namaztime.csv', 'wb') as file:
+        file.write(req.content)
+# download_namaztimecsv()
+
+
+def pars_csv():
+    with open('bot_init/services/namaztime.csv', newline='') as fp:
+        reader = csv.reader(fp)
+        for row in reader:
+            print(row[0])
+
+pars_csv()
